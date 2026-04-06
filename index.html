@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WOLF LABS | HW: Social Media Habits</title>
+    <!-- Premium Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@800;900&family=Outfit:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- WOLF LABS SUPREME ENGINE (HW EDITION - SOCIAL MEDIA) --- */
+        :root {
+            --bg-base: #0f172a; 
+            --brand-main: #38bdf8; /* Light Blue / Tech */
+            --accent: #818cf8; /* Indigo */
+            --accent-glow: rgba(56, 189, 248, 0.5);
+            --correct: #10b981; 
+            --incorrect: #ef4444; 
+            --text-main: #f8fafc;
+            --text-dim: #cbd5e1;
+            --glass-bg: rgba(15, 23, 42, 0.85); 
+            --glass-border: rgba(255, 255, 255, 0.1); 
+            --font-display: 'Montserrat', sans-serif;
+            --font-body: 'Outfit', sans-serif;
+            --font-code: 'Fira Code', monospace;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center;
+            padding: 50px 20px;
+        }
+
+        /* --- BACKGROUNDS --- */
+        .bg-image {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background-image: url('https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=2532&auto=format&fit=crop');
+            background-size: cover; background-position: center;
+            opacity: 0.15; z-index: -2; filter: contrast(120%) brightness(0.5) blur(5px);
+        }
+        .bg-overlay {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(to bottom, rgba(15,23,42,0.85) 0%, rgba(15,23,42,0.98) 100%);
+            z-index: -1;
+        }
+
+        .ambient-orbs { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(140px); opacity: 0.15; animation: floatOrb 25s infinite ease-in-out alternate; }
+        .orb-1 { width: 50vw; height: 50vw; background: var(--brand-main); top: -10%; left: -10%; }
+        .orb-2 { width: 40vw; height: 40vw; background: var(--accent); bottom: -10%; right: -10%; animation-delay: -5s; }
+
+        @keyframes floatOrb { from { transform: translate(0, 0); } to { transform: translate(30px, 30px); } }
+
+        /* --- CONTAINERS --- */
+        .hw-container {
+            width: 100%;
+            max-width: 850px;
+            z-index: 10;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg); backdrop-filter: blur(35px) saturate(120%); -webkit-backdrop-filter: blur(35px) saturate(120%);
+            border: 1px solid var(--glass-border); border-top: 3px solid var(--brand-main);
+            padding: 50px 60px; border-radius: 24px; width: 100%;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+            margin-bottom: 30px;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1 { font-family: var(--font-display); font-size: 3.5rem; line-height: 1.1; margin-bottom: 10px; color: #fff; text-transform: uppercase; letter-spacing: -1px; text-align: center; text-shadow: 0 5px 15px rgba(0,0,0,0.5);}
+        h2 { font-family: var(--font-display); font-size: 1.8rem; color: var(--brand-main); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px;}
+        p { font-size: 1.2rem; line-height: 1.6; color: var(--text-dim); margin-bottom: 25px;}
+        
+        .tag { background: rgba(56, 189, 248, 0.15); border: 1px solid var(--brand-main); color: var(--brand-main); padding: 5px 12px; border-radius: 8px; font-family: var(--font-code); font-size: 0.9rem; font-weight: bold; }
+
+        /* --- INPUTS & EXERCISES --- */
+        .input-group { margin-bottom: 25px; }
+        .input-group label { display: block; font-weight: 700; margin-bottom: 10px; font-size: 1.2rem; color: #fff; }
+        
+        input[type="text"], textarea {
+            width: 100%; background: rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 18px 25px; border-radius: 16px; font-size: 1.2rem;
+            font-family: var(--font-body); outline: none; transition: 0.3s; box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+        }
+        input[type="text"]:focus, textarea:focus { border-color: var(--brand-main); background: rgba(56, 189, 248, 0.05); box-shadow: inset 0 5px 15px rgba(0,0,0,0.3), 0 0 15px rgba(56, 189, 248, 0.2);}
+        
+        .question-block {
+            background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.05);
+            padding: 25px; border-radius: 16px; margin-bottom: 20px; transition: 0.3s;
+        }
+        .question-block:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.1); }
+        .question-text { font-size: 1.4rem; font-weight: 600; margin-bottom: 15px; color: #fff; line-height: 1.5; }
+        
+        /* --- INTERACTIVE BUTTONS --- */
+        .hw-options { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 15px; }
+        .hw-opt-btn {
+            background: rgba(255,255,255,0.05); border: 2px solid rgba(255,255,255,0.1);
+            color: #fff; padding: 14px 24px; border-radius: 12px; font-size: 1.2rem;
+            cursor: pointer; transition: 0.2s; font-family: var(--font-body); font-weight: 600;
+            flex: 1; min-width: 140px; box-shadow: 0 4px 10px rgba(0,0,0,0.2); text-align: center;
+        }
+        .hw-opt-btn:hover { background: rgba(56, 189, 248, 0.1); border-color: var(--brand-main); transform: translateY(-2px); }
+        .hw-opt-btn.selected { background: var(--brand-main); color: #0f172a; border-color: var(--brand-main); box-shadow: 0 5px 20px var(--accent-glow); transform: scale(1.02); }
+        
+        /* Validation States */
+        .hw-opt-btn.correct { background: var(--correct); color: #0f172a; border-color: var(--correct); pointer-events: none;}
+        .hw-opt-btn.error { background: var(--incorrect); color: #fff; border-color: var(--incorrect); pointer-events: none;}
+
+        .btn-submit { 
+            width: 100%; -webkit-appearance: none; appearance: none; outline: none;
+            padding: 22px; border: none; border-radius: 16px; font-weight: 800; font-size: 1.3rem; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; display: flex; justify-content: center; align-items: center; gap: 12px; background: linear-gradient(135deg, var(--brand-main), #0284c7); color: #020617; box-shadow: 0 15px 35px var(--accent-glow); font-family: var(--font-body); margin-top: 20px;
+        }
+        .btn-submit:hover { transform: translateY(-4px); box-shadow: 0 20px 45px rgba(56, 189, 248, 0.6); }
+
+        #score-display { display: none; text-align: center; margin-top: 40px; font-family: var(--font-display); font-size: 3rem; color: var(--correct); background: rgba(16, 185, 129, 0.1); padding: 30px; border-radius: 20px; border: 2px dashed var(--correct); box-shadow: inset 0 0 30px rgba(16,185,129,0.2);}
+
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+
+        /* Confetti */
+        #confetti-canvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 999; }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+    
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+    <canvas id="confetti-canvas"></canvas>
+
+    <div class="hw-container">
+        
+        <!-- HEADER -->
+        <div style="text-align: center; margin-bottom: 40px;">
+            <i class="fa-solid fa-mobile-screen" style="font-size: 3.5rem; color: var(--brand-main); margin-bottom: 20px; filter: drop-shadow(0 0 20px var(--accent-glow));"></i>
+            <h1>Digital Homework</h1>
+            <p style="font-size: 1.5rem; color: #fff; font-weight: 300;">Lesson: Social Media Habits <span class="tag">A1</span></p>
+        </div>
+
+        <div class="glass-panel">
+            <div class="input-group" style="margin: 0;">
+                <label for="student-name"><i class="fa-solid fa-user" style="color:var(--brand-main); margin-right:8px;"></i> Student Name:</label>
+                <input type="text" id="student-name" placeholder="Type your full name here..." required>
+            </div>
+        </div>
+
+        <!-- EXERCISE 1: VOCABULARY -->
+        <div class="glass-panel">
+            <h2><i class="fa-solid fa-book-open"></i> Part 1: Vocabulary Match</h2>
+            <p>Choose the correct English word for each definition.</p>
+            
+            <div class="question-block" id="qb1">
+                <div class="question-text">1. Feeling unhappy because you have nothing to do.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q1', 'entertaining')">Entertaining</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q1', 'bored')">Bored</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q1', 'limits')">Limits</button>
+                </div>
+                <input type="hidden" id="q1" data-answer="bored" value="">
+            </div>
+
+            <div class="question-block" id="qb2">
+                <div class="question-text">2. Hard to stop doing.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q2', 'calming')">Calming</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q2', 'addictive')">Addictive</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q2', 'definitely')">Definitely</button>
+                </div>
+                <input type="hidden" id="q2" data-answer="addictive" value="">
+            </div>
+
+            <div class="question-block" id="qb3">
+                <div class="question-text">3. Fun and interesting.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q3', 'entertaining')">Entertaining</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q3', 'bored')">Bored</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q3', 'screen time')">Screen Time</button>
+                </div>
+                <input type="hidden" id="q3" data-answer="entertaining" value="">
+            </div>
+
+            <div class="question-block" id="qb4">
+                <div class="question-text">4. To use something badly (like time or money).</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q4', 'catch up')">Catch up</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q4', 'stay in touch')">Stay in touch</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q4', 'waste')">Waste</button>
+                </div>
+                <input type="hidden" id="q4" data-answer="waste" value="">
+            </div>
+
+            <div class="question-block" id="qb5">
+                <div class="question-text">5. To talk to someone you haven't seen for a while.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q5', 'catch up')">Catch up</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q5', 'waste')">Waste</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q5', 'peel')">Peel</button>
+                </div>
+                <input type="hidden" id="q5" data-answer="catch up" value="">
+            </div>
+        </div>
+
+        <!-- EXERCISE 2: GRAMMAR (AFFIRMATIVE) -->
+        <div class="glass-panel">
+            <h2><i class="fa-solid fa-check"></i> Part 2: The 'S' Rule (Simple Present)</h2>
+            <p>Remember: We add 'S' or 'ES' to the verb only for <strong>He, She, It</strong>. Choose the correct verb.</p>
+            
+            <div class="question-block" id="qb6">
+                <div class="question-text">6. I ________ social media every day.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q6', 'use')">use</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q6', 'uses')">uses</button>
+                </div>
+                <input type="hidden" id="q6" data-answer="use" value="">
+            </div>
+
+            <div class="question-block" id="qb7">
+                <div class="question-text">7. Georgie ________ TikTok videos.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q7', 'watch')">watch</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q7', 'watches')">watches</button>
+                </div>
+                <input type="hidden" id="q7" data-answer="watches" value="">
+            </div>
+
+            <div class="question-block" id="qb8">
+                <div class="question-text">8. He ________ a lot of time on his phone.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q8', 'waste')">waste</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q8', 'wastes')">wastes</button>
+                </div>
+                <input type="hidden" id="q8" data-answer="wastes" value="">
+            </div>
+
+            <div class="question-block" id="qb9">
+                <div class="question-text">9. We ________ messaging apps.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q9', 'like')">like</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q9', 'likes')">likes</button>
+                </div>
+                <input type="hidden" id="q9" data-answer="like" value="">
+            </div>
+
+            <div class="question-block" id="qb10">
+                <div class="question-text">10. My friend ________ limits on his phone.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q10', 'put')">put</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q10', 'puts')">puts</button>
+                </div>
+                <input type="hidden" id="q10" data-answer="puts" value="">
+            </div>
+        </div>
+
+        <!-- EXERCISE 3: GRAMMAR (NEGATIVE & ADVERBS) -->
+        <div class="glass-panel">
+            <h2><i class="fa-solid fa-xmark"></i> Part 3: Negatives & Certainty</h2>
+            <p>Choose the correct auxiliary verb (don't / doesn't) or adverb.</p>
+            
+            <div class="question-block" id="qb11">
+                <div class="question-text">11. I ________ use my phone at night.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q11', 'don\'t')">don't</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q11', 'doesn\'t')">doesn't</button>
+                </div>
+                <input type="hidden" id="q11" data-answer="don't" value="">
+            </div>
+
+            <div class="question-block" id="qb12">
+                <div class="question-text">12. Neil ________ watch TikTok.</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q12', 'don\'t')">don't</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q12', 'doesn\'t')">doesn't</button>
+                </div>
+                <input type="hidden" id="q12" data-answer="doesn't" value="">
+            </div>
+
+            <div class="question-block" id="qb13">
+                <div class="question-text">13. 100% Yes. "I ________ use social media."</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q13', 'maybe')">maybe</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q13', 'definitely')">definitely</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q13', 'probably')">probably</button>
+                </div>
+                <input type="hidden" id="q13" data-answer="definitely" value="">
+            </div>
+
+            <div class="question-block" id="qb14">
+                <div class="question-text">14. 50% Yes. "________ I will use my phone less."</div>
+                <div class="hw-options">
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q14', 'Definitely')">Definitely</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q14', 'Maybe')">Maybe</button>
+                    <button class="hw-opt-btn" onclick="selectOption(this, 'q14', 'Probably')">Probably</button>
+                </div>
+                <input type="hidden" id="q14" data-answer="Maybe" value="">
+            </div>
+        </div>
+
+        <!-- EXERCISE 4: WRITING -->
+        <div class="glass-panel" id="qb15">
+            <h2><i class="fa-solid fa-pen-nib"></i> Part 4: Your Habits (Writing)</h2>
+            <p><strong>15. Write 3 sentences about your social media habits.</strong><br> What apps do you use? When do you use them? Is it addictive?</p>
+            
+            <textarea id="writing-task" rows="5" placeholder="Example: I use WhatsApp to stay in touch with friends. I don't use TikTok. Instagram is very entertaining..."></textarea>
+        </div>
+
+        <button class="btn-submit" onclick="checkAnswers()"><i class="fa-solid fa-paper-plane"></i> Submit Homework</button>
+
+        <div id="score-display">
+            100% CORRECT! <i class="fa-solid fa-trophy" style="color: gold;"></i><br>
+            <span style="font-size: 1.4rem; color: #fff; font-family: var(--font-body); font-weight: normal; margin-top:15px; display:block;">Take a screenshot of this page and send it to your teacher!</span>
+        </div>
+
+    </div>
+
+    <script>
+        function selectOption(btn, inputId, value) {
+            let siblings = btn.parentElement.children;
+            for(let s of siblings) s.classList.remove('selected');
+            
+            btn.classList.add('selected');
+            document.getElementById(inputId).value = value;
+            
+            const block = btn.closest('.question-block');
+            block.style.borderColor = 'rgba(255,255,255,0.05)';
+            block.classList.remove('shake');
+        }
+
+        function checkAnswers() {
+            const name = document.getElementById('student-name').value;
+            if(!name) {
+                alert("Please type your name before submitting!");
+                document.getElementById('student-name').focus();
+                return;
+            }
+
+            let score = 0;
+            const totalQuestions = 14;
+            let allAnswered = true;
+
+            for(let i = 1; i <= totalQuestions; i++) {
+                const inputEl = document.getElementById('q' + i);
+                const userAnswer = inputEl.value;
+                const correctAnswer = inputEl.getAttribute('data-answer');
+                const block = document.getElementById('qb' + i);
+                const selectedBtn = block.querySelector('.hw-opt-btn.selected');
+
+                if(userAnswer === "") {
+                    allAnswered = false;
+                    block.style.borderColor = 'var(--incorrect)';
+                    block.classList.add('shake');
+                    setTimeout(() => block.classList.remove('shake'), 500);
+                } else if(userAnswer === correctAnswer) {
+                    score++;
+                    block.style.borderColor = 'var(--correct)';
+                    block.style.backgroundColor = 'rgba(16, 185, 129, 0.05)';
+                    if(selectedBtn) {
+                        selectedBtn.classList.remove('selected');
+                        selectedBtn.classList.add('correct');
+                    }
+                } else {
+                    block.style.borderColor = 'var(--incorrect)';
+                    block.classList.add('shake');
+                    setTimeout(() => block.classList.remove('shake'), 500);
+                    if(selectedBtn) {
+                        selectedBtn.classList.remove('selected');
+                        selectedBtn.classList.add('error');
+                    }
+                }
+            }
+
+            if(!allAnswered) {
+                alert("Please answer all questions before submitting!");
+                return;
+            }
+
+            if(score === totalQuestions) {
+                const writing = document.getElementById('writing-task').value;
+                const writingBlock = document.getElementById('qb15');
+                
+                if(writing.length < 15) {
+                    alert("Almost there! Don't forget to write your routine in Exercise 15.");
+                    document.getElementById('writing-task').focus();
+                    writingBlock.style.borderColor = 'var(--brand-main)';
+                    writingBlock.style.boxShadow = '0 0 30px rgba(56, 189, 248, 0.3)';
+                    return;
+                }
+
+                writingBlock.style.borderColor = 'var(--correct)';
+                writingBlock.style.background = 'rgba(16, 185, 129, 0.05)';
+                writingBlock.style.boxShadow = '0 30px 80px rgba(0,0,0,0.8)';
+                
+                document.getElementById('score-display').style.display = 'block';
+                fireConfetti();
+                
+                // Scroll to bottom
+                window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+            } else {
+                alert("Some answers are incorrect. Please check the red fields and try again!");
+            }
+        }
+
+        // --- NATIVE JS CONFETTI ---
+        function fireConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            let particles = [];
+            const colors = ['#38bdf8', '#818cf8', '#ffffff', '#10b981', '#fde047'];
+            
+            for(let i=0; i<150; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    w: Math.random() * 10 + 5,
+                    h: Math.random() * 10 + 5,
+                    c: colors[Math.floor(Math.random() * colors.length)],
+                    dy: Math.random() * 4 + 2,
+                    dx: Math.random() * 4 - 2,
+                    rot: Math.random() * 360,
+                    rs: Math.random() * 5 - 2.5
+                });
+            }
+            
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                let active = false;
+                
+                particles.forEach(p => {
+                    p.y += p.dy; 
+                    p.x += p.dx; 
+                    p.rot += p.rs;
+                    
+                    if(p.y < canvas.height) active = true;
+                    
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate(p.rot * Math.PI / 180);
+                    ctx.fillStyle = p.c;
+                    ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+                    ctx.restore();
+                });
+                
+                if(active) requestAnimationFrame(animate);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            }
+            animate();
+            
+            window.addEventListener('resize', () => {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            });
+        }
+    </script>
+</body>
+</html>
